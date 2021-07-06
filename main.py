@@ -4,6 +4,9 @@ import pywhatkit
 import datetime
 import wikipedia
 import pyjokes
+import random
+import os
+import subprocess
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
@@ -30,28 +33,59 @@ def take_command():
         pass
     return command
 
+def play_music(music):
+    talk('playing' + music)
+    pywhatkit.playonyt(music)
+
+def talk_greetings():
+    greetings = ['Hi Whats up?',
+                 'Hello! How are you?',
+                 'Welcome',
+                 'Lets have some fun',
+                 'Ask me anything']
+    talk(random.choice(greetings))
+
+def open_application(app_name):
+    talk('opening ' + app_name)
+    if 'spotify' in app_name:
+        spotify_location = r'"C:\Users\Da Vinci\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Spotify.lnk"'
+        os.system(spotify_location)
+
 def run_nexa():
     command = take_command()
     print(command)
-    if 'song' in command:
-        song = command.replace('song', '')
-        talk('playing' + song)
-        pywhatkit.playonyt(song)
+    if 'what is' in command:
+        wikiterm = command.replace('what is', '')
+        info = wikipedia.summary(wikiterm, 1)
+        print(info)
+        talk(info)
+
+    elif 'open' in command:
+        open_application(command.replace('open', ''))
+
+    elif 'song' in command:
+        song1 = command.replace('song', '')
+        play_music(song1)
+
+    elif 'music' in command:
+        song2 = command.replace('music', '')
+        play_music(song2)
+
     elif 'time' in command:
         time = datetime.datetime.now().strftime('%I:%M %p')
         print(time)
         talk('Current time is ' + time)
+
     elif 'date' in command:
         date = datetime.datetime.now().strftime('%d %B, %Y')
         print(date)
         talk('Today date is ' + date)
-    elif 'what is' in command:
-        wikiTerm = command.replace('what is', '')
-        info = wikipedia.summary(wikiTerm, 1)
-        print(info)
-        talk(info)
+
     elif 'joke' in command:
         talk(pyjokes.get_joke())
+
+    elif 'Hi' or 'Hello' in command:
+        talk_greetings()
 
     else:
         talk("I can't get it. Try again")
