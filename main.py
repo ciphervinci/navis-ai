@@ -63,6 +63,12 @@ def run_nexa():
     elif 'open' in command:
         open_application(command.replace('open', ''))
 
+    elif 'girlfriend' in command:
+        #girlfriend = command.replace('girlfriend', '')
+        girl = "Don't get a girlfriend, they are bitches. Have me instead"
+        print(girl)
+        talk(girl)
+
     elif 'song' in command:
         song1 = command.replace('song', '')
         play_music(song1)
